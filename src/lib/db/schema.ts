@@ -49,3 +49,12 @@ export const verification = pgTable("verification", {
   createdAt: timestamp("created_at"),
   updatedAt: timestamp("updated_at"),
 });
+
+// Non Auth related tables
+
+export const topic = pgTable("topic", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  createdAt: timestamp("created_at").notNull(),
+  updatedAt: timestamp("updated_at").notNull(),
+});

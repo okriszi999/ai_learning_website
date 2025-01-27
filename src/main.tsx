@@ -29,7 +29,7 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />)
+      <RouterProvider router={router} />
     </QueryClientProvider>
   );
 }

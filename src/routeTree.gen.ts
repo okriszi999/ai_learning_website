@@ -8,82 +8,182 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as AboutImport } from './routes/about'
-import { Route as IndexImport } from './routes/index'
+import { Route as AboutIndexImport } from './routes/about/index'
+import { Route as landingpageIndexImport } from './routes/(landing_page)/index'
+import { Route as authLayoutImport } from './routes/(auth)/_layout'
+import { Route as authLayoutSignUpImport } from './routes/(auth)/_layout..sign-up'
+import { Route as authLayoutSignInImport } from './routes/(auth)/_layout.sign-in'
+
+// Create Virtual Routes
+
+const authImport = createFileRoute('/(auth)')()
 
 // Create/Update Routes
 
-const AboutRoute = AboutImport.update({
-  id: '/about',
-  path: '/about',
+const authRoute = authImport.update({
+  id: '/(auth)',
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexRoute = IndexImport.update({
-  id: '/',
+const AboutIndexRoute = AboutIndexImport.update({
+  id: '/about/',
+  path: '/about/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const landingpageIndexRoute = landingpageIndexImport.update({
+  id: '/(landing_page)/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const authLayoutRoute = authLayoutImport.update({
+  id: '/_layout',
+  getParentRoute: () => authRoute,
+} as any)
+
+const authLayoutSignUpRoute = authLayoutSignUpImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => authLayoutRoute,
+} as any)
+
+const authLayoutSignInRoute = authLayoutSignInImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => authLayoutRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/(auth)': {
+      id: '/(auth)'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+      preLoaderRoute: typeof authImport
       parentRoute: typeof rootRoute
     }
-    '/about': {
-      id: '/about'
+    '/(auth)/_layout': {
+      id: '/(auth)/_layout'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof authLayoutImport
+      parentRoute: typeof authRoute
+    }
+    '/(landing_page)/': {
+      id: '/(landing_page)/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof landingpageIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/about/': {
+      id: '/about/'
       path: '/about'
       fullPath: '/about'
-      preLoaderRoute: typeof AboutImport
+      preLoaderRoute: typeof AboutIndexImport
       parentRoute: typeof rootRoute
+    }
+    '/(auth)/_layout/sign-in': {
+      id: '/(auth)/_layout/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof authLayoutSignInImport
+      parentRoute: typeof authLayoutImport
+    }
+    '/(auth)/_layout/sign-up': {
+      id: '/(auth)/_layout/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof authLayoutSignUpImport
+      parentRoute: typeof authLayoutImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface authLayoutRouteChildren {
+  authLayoutSignInRoute: typeof authLayoutSignInRoute
+  authLayoutSignUpRoute: typeof authLayoutSignUpRoute
+}
+
+const authLayoutRouteChildren: authLayoutRouteChildren = {
+  authLayoutSignInRoute: authLayoutSignInRoute,
+  authLayoutSignUpRoute: authLayoutSignUpRoute,
+}
+
+const authLayoutRouteWithChildren = authLayoutRoute._addFileChildren(
+  authLayoutRouteChildren,
+)
+
+interface authRouteChildren {
+  authLayoutRoute: typeof authLayoutRouteWithChildren
+}
+
+const authRouteChildren: authRouteChildren = {
+  authLayoutRoute: authLayoutRouteWithChildren,
+}
+
+const authRouteWithChildren = authRoute._addFileChildren(authRouteChildren)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/': typeof landingpageIndexRoute
+  '/about': typeof AboutIndexRoute
+  '/sign-in': typeof authLayoutSignInRoute
+  '/sign-up': typeof authLayoutSignUpRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/': typeof landingpageIndexRoute
+  '/about': typeof AboutIndexRoute
+  '/sign-in': typeof authLayoutSignInRoute
+  '/sign-up': typeof authLayoutSignUpRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
+  '/(auth)': typeof authRouteWithChildren
+  '/(auth)/_layout': typeof authLayoutRouteWithChildren
+  '/(landing_page)/': typeof landingpageIndexRoute
+  '/about/': typeof AboutIndexRoute
+  '/(auth)/_layout/sign-in': typeof authLayoutSignInRoute
+  '/(auth)/_layout/sign-up': typeof authLayoutSignUpRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths: '/' | '/about' | '/sign-in' | '/sign-up'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to: '/' | '/about' | '/sign-in' | '/sign-up'
+  id:
+    | '__root__'
+    | '/(auth)'
+    | '/(auth)/_layout'
+    | '/(landing_page)/'
+    | '/about/'
+    | '/(auth)/_layout/sign-in'
+    | '/(auth)/_layout/sign-up'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
+  authRoute: typeof authRouteWithChildren
+  landingpageIndexRoute: typeof landingpageIndexRoute
+  AboutIndexRoute: typeof AboutIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
+  authRoute: authRouteWithChildren,
+  landingpageIndexRoute: landingpageIndexRoute,
+  AboutIndexRoute: AboutIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -96,15 +196,38 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/about"
+        "/(auth)",
+        "/(landing_page)/",
+        "/about/"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/(auth)": {
+      "filePath": "(auth)",
+      "children": [
+        "/(auth)/_layout"
+      ]
     },
-    "/about": {
-      "filePath": "about.tsx"
+    "/(auth)/_layout": {
+      "filePath": "(auth)/_layout.tsx",
+      "parent": "/(auth)",
+      "children": [
+        "/(auth)/_layout/sign-in",
+        "/(auth)/_layout/sign-up"
+      ]
+    },
+    "/(landing_page)/": {
+      "filePath": "(landing_page)/index.tsx"
+    },
+    "/about/": {
+      "filePath": "about/index.tsx"
+    },
+    "/(auth)/_layout/sign-in": {
+      "filePath": "(auth)/_layout.sign-in.tsx",
+      "parent": "/(auth)/_layout"
+    },
+    "/(auth)/_layout/sign-up": {
+      "filePath": "(auth)/_layout..sign-up.tsx",
+      "parent": "/(auth)/_layout"
     }
   }
 }

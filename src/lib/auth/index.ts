@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "../db";
+import { db } from "@/lib/db";
 import { createAuthClient } from "better-auth/react";
 import { config } from "dotenv";
 

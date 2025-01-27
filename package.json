@@ -11,16 +11,23 @@
     "start": "vite"
   },
   "devDependencies": {
+    "@tanstack/router-plugin": "^1.97.8",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "@tanstack/router-plugin": "^1.97.8",
     "@vitejs/plugin-react": "^4.3.2",
+    "drizzle-kit": "^0.30.3",
+    "tsx": "^4.19.2",
     "vite": "^6.0.3"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^0.10.4",
     "@tanstack/react-query": "^5.64.2",
     "@tanstack/react-router": "^1.97.21",
     "@tanstack/router-devtools": "^1.97.8",
+    "@tanstack/start": "^1.97.23",
+    "better-auth": "^1.1.14",
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.39.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   }
